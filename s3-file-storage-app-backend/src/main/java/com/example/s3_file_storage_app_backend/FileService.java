@@ -1,6 +1,8 @@
 package com.example.s3_file_storage_app_backend;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CopyObjectRequest;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -45,9 +47,17 @@ public class FileService {
     }
 
     public UploadedFile updateFileName(Long fileId, String newFileName) {
-        UploadedFile file = fileRepository.findById(fileId).orElseThrow(() -> new RuntimeException("File not found"));
-        file.setFileName(newFileName);
-        return fileRepository.save(file);
+        UploadedFile uploadedFile = fileRepository.findById(fileId).orElseThrow(() -> new IllegalArgumentException("File not found"));
+        String oldFileName = uploadedFile.getFileName();
+
+        // Copy the file in S3
+        s3client.copyObject(new CopyObjectRequest(BUCKET_NAME, oldFileName, BUCKET_NAME, newFileName));
+
+        // Delete the old file from S3
+        s3client.deleteObject(new DeleteObjectRequest(BUCKET_NAME, oldFileName));
+
+        uploadedFile.setFileName(newFileName);
+        return fileRepository.save(uploadedFile);
     }
 
     public List<UploadedFile> listFiles() {
