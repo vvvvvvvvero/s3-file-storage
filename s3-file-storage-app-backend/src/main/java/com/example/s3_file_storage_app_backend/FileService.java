@@ -24,9 +24,20 @@ public class FileService {
     private final String BUCKET_NAME = "mylab5filemanagerbucket";
 
     public UploadedFile uploadFile(MultipartFile file, String specifiedFileName) throws IOException {
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null) {
+            throw new IllegalArgumentException("File must have an original filename");
+        }
+
+        String fileExtension = "";
+        String[] parts = originalFileName.split("\\.");
+        if (parts.length > 1) {
+            fileExtension = "." + parts[parts.length - 1];
+        }
+
         String fileName = specifiedFileName != null && !specifiedFileName.isEmpty()
-                ? specifiedFileName
-                : UUID.randomUUID() + "_" + file.getOriginalFilename();
+                ? specifiedFileName + fileExtension
+                : UUID.randomUUID() + "_" + originalFileName;
         String fileUrl = "https://" + BUCKET_NAME + ".s3.amazonaws.com/" + fileName;
         try {
             s3client.putObject(BUCKET_NAME, fileName, file.getInputStream(), null);
