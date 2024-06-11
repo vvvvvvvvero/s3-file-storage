@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/files")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class FileController {
 
