@@ -1,13 +1,13 @@
 // src/components/UploadFile.tsx
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { uploadFile } from '../api/FileService.ts';
+import React, {useState} from 'react';
+import {Button, Form} from 'react-bootstrap';
+import {uploadFile} from '../api/FileService.ts';
 
 interface UploadFileProps {
     onUpload: () => void;
 }
 
-const UploadFile: React.FC<UploadFileProps> = ({ onUpload }) => {
+const UploadFile: React.FC<UploadFileProps> = ({onUpload}) => {
     const [file, setFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string>('');
 
@@ -29,7 +29,7 @@ const UploadFile: React.FC<UploadFileProps> = ({ onUpload }) => {
         }
         try {
             await uploadFile(file, fileName);
-            alert('UploadedFile uploaded successfully');
+            alert('Uploaded successfully');
             onUpload(); // Fetch files again
         } catch (error) {
             console.error('Error uploading file', error);
@@ -39,19 +39,22 @@ const UploadFile: React.FC<UploadFileProps> = ({ onUpload }) => {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formFileName">
-                <Form.Label>File Name</Form.Label>
-                <Form.Control
-                    type="text"
-                    value={fileName}
-                    onChange={handleFileNameChange}
-                    placeholder="Enter file name (optional)"
-                />
-            </Form.Group>
+            <div className="mb-2">
+                <Form.Group controlId="formFileName">
+                    <Form.Label>File Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={fileName}
+                        onChange={handleFileNameChange}
+                        placeholder="Enter file name (optional)"
+                    />
+                </Form.Group>
+            </div>
+            <div className="mb-2">
             <Form.Group controlId="formFile">
-                <Form.Label>Choose File</Form.Label>
-                <Form.Control type="file" onChange={handleFileChange} />
+                <Form.Control type="file" onChange={handleFileChange}/>
             </Form.Group>
+            </div>
             <Button variant="primary" type="submit">
                 Upload
             </Button>

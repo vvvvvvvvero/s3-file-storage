@@ -16,13 +16,13 @@ const FileItem: React.FC<FileItemProps> = ({file, onDelete, onUpdate}) => {
             <td>
                 <a href={file.fileUrl} target="_blank" rel="noopener noreferrer">
                     <Button variant="success">Download</Button>
-                </a>
+                </a>{' '}
                 <Button variant="warning" onClick={() => onUpdate(file.id)}>
                     Edit
-                </Button>
+                </Button>{' '}
                 <Button variant="danger" onClick={() => onDelete(file.id)}>
                     Delete
-                </Button></td>
+                </Button>{' '}</td>
         </tr>
     )
 }
