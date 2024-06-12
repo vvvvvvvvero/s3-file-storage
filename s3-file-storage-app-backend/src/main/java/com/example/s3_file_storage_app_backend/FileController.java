@@ -40,7 +40,7 @@ public class FileController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UploadedFile> updateFileName(@PathVariable Long id, @RequestParam String newFileName) {
+    public ResponseEntity<UploadedFile> updateFileName(@PathVariable Long id, @RequestParam("newFileName") String newFileName) {
         UploadedFile updatedFile = fileService.updateFileName(id, newFileName);
         return ResponseEntity.ok(updatedFile);
     }
