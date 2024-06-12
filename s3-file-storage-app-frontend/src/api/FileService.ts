@@ -21,7 +21,9 @@ export const deleteFile = async (id: number) => {
 };
 
 export const updateFileName = async (id: number, newFileName: string) => {
-    await axios.put(`${API_URL}/${id}`, { newFileName });
+    await axios.put(`${API_URL}/${id}`, null, {
+        params: { newFileName }
+    });
 };
 
 export const listFiles = async () => {
