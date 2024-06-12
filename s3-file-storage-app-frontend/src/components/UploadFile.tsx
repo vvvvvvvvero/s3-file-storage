@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { uploadFile } from '../api/FileService.ts';
 
-const UploadFile: React.FC = () => {
+interface UploadFileProps {
+    onUpload: () => void;
+}
+
+const UploadFile: React.FC<UploadFileProps> = ({ onUpload }) => {
     const [file, setFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string>('');
 
@@ -24,8 +28,9 @@ const UploadFile: React.FC = () => {
             return;
         }
         try {
-            const uploadedFile = await uploadFile(file, fileName);
-            alert('File uploaded successfully: ' + uploadedFile.fileName);
+            await uploadFile(file, fileName);
+            alert('UploadedFile uploaded successfully');
+            onUpload(); // Fetch files again
         } catch (error) {
             console.error('Error uploading file', error);
             alert('Error uploading file');

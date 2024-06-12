@@ -1,46 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Table } from 'react-bootstrap';
-import { listFiles, deleteFile, updateFileName } from '../api/FileService.ts';
 import FileItem from './FileItem';
-import { File } from '../types/File';
+import { UploadedFile } from '../types/UploadedFile.ts';
 
-const FileList: React.FC = () => {
-    const [files, setFiles] = useState<File[]>([]);
+interface FileListProps {
+    files: UploadedFile[];
+    onDelete: (id: number) => void;
+    onUpdate: (id: number) => void;
+}
 
-    const getFiles = async () => {
-        try {
-            const files = await listFiles();
-            setFiles(files);
-        } catch (error) {
-            console.error('Error fetching files', error);
-        }
-    };
-
-    useEffect(() => {
-        getFiles();
-    }, []);
-
-    const handleDelete = async (id: number) => {
-        try {
-            await deleteFile(id);
-            setFiles(files.filter((file) => file.id !== id));
-        } catch (error) {
-            console.error('Error deleting file', error);
-        }
-    };
-
-    const handleUpdate = async (id: number) => {
-        const newFileName = prompt('Enter new file name');
-        if (newFileName) {
-            try {
-                await updateFileName(id, newFileName);
-                getFiles();
-            } catch (error) {
-                console.error('Error updating file name', error);
-            }
-        }
-    };
-
+const FileList: React.FC<FileListProps> = ({ files, onDelete, onUpdate }) => {
     return (
         <Table striped bordered hover>
             <thead>
@@ -52,7 +21,7 @@ const FileList: React.FC = () => {
             </thead>
             <tbody>
             {files.map((file) => (
-                <FileItem key={file.id} file={file} onDelete={handleDelete} onUpdate={handleUpdate} />
+                <FileItem key={file.id} file={file} onDelete={onDelete} onUpdate={onUpdate} />
             ))}
             </tbody>
         </Table>

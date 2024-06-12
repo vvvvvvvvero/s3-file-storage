@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
-import {File} from '../types/File'
+import {UploadedFile} from '../types/UploadedFile.ts'
 
 interface FileItemProps {
-    file: File;
+    file: UploadedFile;
     onDelete: (id: number) => void;
     onUpdate: (id: number) => void;
 }
